@@ -68,9 +68,9 @@ public class CloudBenchService extends Observable implements Serializable, ICred
 	private static final long serialVersionUID = -7680311779178774123L;
 
 	private LinkedList<Provider> providers = new LinkedList<Provider>();
-	private Map<Provider, ComputeServiceContext> contextForProvider = new HashMap<>();
+	private Map<Provider, ComputeServiceContext> contextForProvider = new HashMap<Provider, ComputeServiceContext>();
 
-	private Map<InstanceType, Multimap<Benchmark, Result>> resultsForAllBenchmarksForType = new HashMap<>();
+	private Map<InstanceType, Multimap<Benchmark, Result>> resultsForAllBenchmarksForType = new HashMap<InstanceType, Multimap<Benchmark, Result>>();
 
 	private BenchmarkingState benchmarkingState;
 
@@ -168,8 +168,7 @@ public class CloudBenchService extends Observable implements Serializable, ICred
 		try {
 			this.stopper =
 			    StoppingConfiguration.newInstanceOf(stoppingMethodIndex, this, runnerClass, checkedInstanceTypes, benchmarks);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-		    | NoSuchMethodException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -224,7 +223,7 @@ public class CloudBenchService extends Observable implements Serializable, ICred
 	public void setBenchmarkResultsForType(Map<InstanceType, Multimap<Benchmark, Result>> resultsForAllBenchmarksForType) {
 		this.resultsForAllBenchmarksForType = resultsForAllBenchmarksForType;
 		InstanceType instanceType = resultsForAllBenchmarksForType.keySet().iterator().next();
-		this.benchmarks = new LinkedList<>(resultsForAllBenchmarksForType.get(instanceType).keySet());
+		this.benchmarks = new LinkedList<Benchmark>(resultsForAllBenchmarksForType.get(instanceType).keySet());
 	}
 
 	public String getStopperLog() {

@@ -78,7 +78,7 @@ public class BenchmarkSelectionModel extends Observable implements Serializable 
 
 	public boolean isOneSelectedOfType(String type) {
 		Collection<? extends IMetricsType> benchmarksForType = Benchmark.getAllBenchmarks().get(type);
-		Collection<IMetricsType> intersection = new LinkedList<>(benchmarksForType);
+		Collection<IMetricsType> intersection = new LinkedList<IMetricsType>(benchmarksForType);
 		intersection.retainAll(getSelected());
 
 		return intersection.size() > 0;

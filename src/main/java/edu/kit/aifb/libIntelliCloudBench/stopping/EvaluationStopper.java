@@ -32,9 +32,9 @@ public class EvaluationStopper extends StoppingMethod implements IService {
 
 	private List<Class<? extends StoppingMethod>> stoppingMethods;
 
-	private Map<InstanceType, Map<Benchmark, Object>> barriersForBenchmarkForType = new HashMap<>();
+	private Map<InstanceType, Map<Benchmark, Object>> barriersForBenchmarkForType = new HashMap<InstanceType, Map<Benchmark, Object>>();
 
-	private List<StoppingMethod> stoppers = new LinkedList<>();
+	private List<StoppingMethod> stoppers = new LinkedList<StoppingMethod>();
 
 	private List<Runner> ranking;
 
@@ -49,26 +49,26 @@ public class EvaluationStopper extends StoppingMethod implements IService {
 		this.name = service.getName();
 
 		for (InstanceType instanceType : instanceTypes) {
-			Map<Benchmark, Object> barriersForBenchmarks = new HashMap<>();
+			Map<Benchmark, Object> barriersForBenchmarks = new HashMap<Benchmark, Object>();
 			for (Benchmark benchmark : benchmarks) {
 				barriersForBenchmarks.put(benchmark, new Object());
 			}
 			barriersForBenchmarkForType.put(instanceType, barriersForBenchmarks);
 		}
 
-		this.stoppingMethods = new ArrayList<>(StoppingConfiguration.STOPPING_METHODS);
+		this.stoppingMethods = new ArrayList<Class<? extends StoppingMethod>>(StoppingConfiguration.STOPPING_METHODS);
 		this.stoppingMethods.remove(NonStopper.class);
 		this.stoppingMethods.remove(EvaluationStopper.class);
 	}
 
 	@Override
 	protected List<Benchmark> orderBenchmarks(List<Benchmark> benchmarks) {
-		return new LinkedList<>(benchmarks);
+		return new LinkedList<Benchmark>(benchmarks);
 	}
 
 	@Override
 	protected List<InstanceType> orderInstanceTypes(List<InstanceType> instanceTypes) {
-		return new LinkedList<>(instanceTypes);
+		return new LinkedList<InstanceType>(instanceTypes);
 	}
 
 	@Override
@@ -88,8 +88,7 @@ public class EvaluationStopper extends StoppingMethod implements IService {
 				        getOrderedBenchmarks());
 				this.stoppers.add(stopper);
 				stopper.start();
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-			    | NoSuchMethodException | SecurityException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -166,8 +165,8 @@ public class EvaluationStopper extends StoppingMethod implements IService {
 			i++;
 		}
 
-		List<UnorderedSequentialStopper> seq = new LinkedList<>();
-		List<UnorderedParallelStopper> par = new LinkedList<>();
+		List<UnorderedSequentialStopper> seq = new LinkedList<UnorderedSequentialStopper>();
+		List<UnorderedParallelStopper> par = new LinkedList<UnorderedParallelStopper>();
 
 		for (StoppingMethod stopper : stoppers) {
 			if (stopper instanceof UnorderedSequentialStopper) {
@@ -287,9 +286,9 @@ public class EvaluationStopper extends StoppingMethod implements IService {
 		Class<? extends IInstanceOrderer> instanceOrderer = getMetricsConfiguration().getSelectedInstanceOrderer();
 
 		SortedSetMultimap<Double, InstanceType> resultForType;
-		List<Runner> ranking = new LinkedList<>(getStillInRace());
-		List<InstanceType> instanceTypes = new LinkedList<>();
-		List<IMetricsType> allMetricsTypes = new LinkedList<>();
+		List<Runner> ranking = new LinkedList<Runner>(getStillInRace());
+		List<InstanceType> instanceTypes = new LinkedList<InstanceType>();
+		List<IMetricsType> allMetricsTypes = new LinkedList<IMetricsType>();
 
 		if (getMetricsConfiguration().getWeight(CostsStore.getInstance()) != null)
 			allMetricsTypes.add(CostsStore.getInstance());
@@ -315,7 +314,7 @@ public class EvaluationStopper extends StoppingMethod implements IService {
 
 				getMetricsConfiguration().putRelativeResults(metricsType, resultForType);
 
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 

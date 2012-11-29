@@ -49,8 +49,8 @@ import edu.kit.aifb.libIntelliCloudBench.model.json.CostsStore;
 public class MetricsConfiguration implements Serializable {
 	private static final long serialVersionUID = 5888441610004496580L;
 
-	public static final List<Class<? extends IInstanceOrderer>> INSTANCE_ORDERER = new ArrayList<>();
-	public static final List<String> INSTANCE_ORDERER_NAMES = new ArrayList<>();
+	public static final List<Class<? extends IInstanceOrderer>> INSTANCE_ORDERER = new ArrayList<Class<? extends IInstanceOrderer>>();
+	public static final List<String> INSTANCE_ORDERER_NAMES = new ArrayList<String>();
 
 	static {
 		INSTANCE_ORDERER.add(RelativeInstanceOrderer.class);
@@ -121,7 +121,7 @@ public class MetricsConfiguration implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public List<Benchmark> getSelectedBenchmarks() {
-		List<? extends IMetricsType> benchmarks = new LinkedList<>(getSelected());
+		List<? extends IMetricsType> benchmarks = new LinkedList<IMetricsType>(getSelected());
 		benchmarks.remove(CostsStore.getInstance());
 		return (List<Benchmark>) benchmarks;
 	}
@@ -165,7 +165,7 @@ public class MetricsConfiguration implements Serializable {
 			for (InstanceType instanceType : instanceTypes) {
 				Map<IMetricsType, Double> relResults = relativeResults.get(instanceType);
 				if (relResults == null) {
-					relResults = new HashMap<>();
+					relResults = new HashMap<IMetricsType, Double>();
 					relativeResults.put(instanceType, relResults);
 				}
 				relResults.put(metricsType, relativeResult);
@@ -215,7 +215,7 @@ public class MetricsConfiguration implements Serializable {
 		boolean requiresReference = false;
 		try {
 			requiresReference = instanceOrderer.getField("REQUIRES_REFERENCE").getBoolean(null);
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return requiresReference;

@@ -17,7 +17,7 @@ import edu.kit.aifb.libIntelliCloudBench.model.xml.Result;
 public class MetricsHelper {
 	public static Map<InstanceType, Multimap<IMetricsType, IMetricsResult>> combineBenchmarksAndCosts(boolean costsChecked,
       Map<InstanceType, Multimap<Benchmark, Result>> resultsForAllBenchmarksForType) {
-	  Map<InstanceType, Multimap<IMetricsType, IMetricsResult>> resultsForAllMetricsTypesForType = new HashMap<>();
+	  Map<InstanceType, Multimap<IMetricsType, IMetricsResult>> resultsForAllMetricsTypesForType = new HashMap<InstanceType, Multimap<IMetricsType, IMetricsResult>>();
 		for (InstanceType instanceType : resultsForAllBenchmarksForType.keySet()) {
 			Multimap<IMetricsType, IMetricsResult> resultsForAllMetricsTypes = LinkedListMultimap.create();
 			for (Benchmark benchmark : resultsForAllBenchmarksForType.get(instanceType).keySet()) {

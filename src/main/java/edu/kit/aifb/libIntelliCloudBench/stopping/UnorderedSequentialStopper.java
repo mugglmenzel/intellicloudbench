@@ -27,10 +27,10 @@ public class UnorderedSequentialStopper extends StoppingMethod {
 	private int lookbackThreshold = 4;
 	private int counterMarked = 0;
 
-	private ArrayList<Runner> currentRanking = new ArrayList<>();
+	private ArrayList<Runner> currentRanking = new ArrayList<Runner>();
 	private Double currentAvgMean = 1d;
 	private Double newAvgMean = 1d;
-	private List<Runner> abortedRunners = new LinkedList<>();
+	private List<Runner> abortedRunners = new LinkedList<Runner>();
 
 	public UnorderedSequentialStopper(IService service, Class<? extends Runner> runnerType,
 	    List<InstanceType> instanceTypes, List<Benchmark> benchmarks, Integer param) {
@@ -148,7 +148,7 @@ public class UnorderedSequentialStopper extends StoppingMethod {
 		} else {
 			Class<? extends IInstanceOrderer> instanceOrderer = getMetricsConfiguration().getSelectedInstanceOrderer();
 
-			LinkedList<InstanceType> instanceTypes = new LinkedList<>();
+			LinkedList<InstanceType> instanceTypes = new LinkedList<InstanceType>();
 			for (Runner olderRunner : currentRanking) {
 				instanceTypes.add(olderRunner.getInstanceType());
 				newRanking.add(olderRunner);
@@ -184,7 +184,7 @@ public class UnorderedSequentialStopper extends StoppingMethod {
 							}
 							newAvgMean = sumMeans / resultForType.keys().size();
 
-						} catch (InstantiationException | IllegalAccessException e) {
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 

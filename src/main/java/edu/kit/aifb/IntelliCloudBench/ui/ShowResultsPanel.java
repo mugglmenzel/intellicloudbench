@@ -193,7 +193,7 @@ public class ShowResultsPanel extends Panel {
 
 				@Override
 				public void valueChange(ValueChangeEvent event) {
-					costsChecked = (boolean) costsCheckbox.getValue();
+					costsChecked = (Boolean) costsCheckbox.getValue();
 					VerticalLayout newMetricsResultLayout =
 					    buildMetricsResultLayout((Class<IInstanceOrderer>) metricsSelector.getValue(), costsChecked);
 					metricsLayout.replaceComponent(metricsResultLayout, newMetricsResultLayout);
@@ -372,7 +372,7 @@ public class ShowResultsPanel extends Panel {
 					}
 				}
 
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (Exception e) {
 				metricsResultLayout.setComponentError(new SystemError("Could not order the metrics type results for "
 				    + metricsType.getId() + ": " + e.getMessage()));
 			}

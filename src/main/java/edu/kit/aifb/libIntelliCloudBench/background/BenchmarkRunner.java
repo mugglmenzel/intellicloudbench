@@ -207,14 +207,14 @@ public class BenchmarkRunner extends Runner {
 	}
 
 	@Override
-	LinkedListMultimap<Benchmark, Result> upload(Benchmark benchmark) throws ParseXmlResultException, RunScriptOnMachineException {
+	LinkedListMultimap<Benchmark, Result> upload(Benchmark benchmark) {
 		try {
 			if (ssh != null)
 				return uploadResults(ssh);
-		} catch (ParseXmlResultException | RunScriptOnMachineException e) {
+		} catch (Exception e) {
 			if (ssh != null)
 				ssh.disconnect();
-			throw e;
+			//throw e;
 		}
 		return null;
 	}

@@ -33,13 +33,13 @@ public class UnorderedParallelStopper extends StoppingMethod {
 	private Long startTime = null;
 	private Long endTime = null;
 
-	private Map<Benchmark, Collection<Runner>> runnersDoneForBenchmark = new HashMap<>();
+	private Map<Benchmark, Collection<Runner>> runnersDoneForBenchmark = new HashMap<Benchmark, Collection<Runner>>();
 
-	private Map<Benchmark, List<Runner>> rankingAfterBenchmark = new HashMap<>();
+	private Map<Benchmark, List<Runner>> rankingAfterBenchmark = new HashMap<Benchmark, List<Runner>>();
 
-	private List<Runner> runnerStopped = new LinkedList<>();
+	private List<Runner> runnerStopped = new LinkedList<Runner>();
 
-	private List<Runner> lastRanking = new LinkedList<>();
+	private List<Runner> lastRanking = new LinkedList<Runner>();
 
 	public UnorderedParallelStopper(IService service, Class<? extends Runner> runnerType,
 	    List<InstanceType> instanceTypes, List<Benchmark> benchmarks, Integer param) {
@@ -94,7 +94,7 @@ public class UnorderedParallelStopper extends StoppingMethod {
 		synchronized (runnersDoneForBenchmark) {
 			Collection<Runner> runnersDone = runnersDoneForBenchmark.get(benchmark);
 			if (runnersDone == null) {
-				runnersDone = new LinkedList<>();
+				runnersDone = new LinkedList<Runner>();
 				runnersDoneForBenchmark.put(benchmark, runnersDone);
 			}
 			runnersDone.add(runner);
@@ -103,7 +103,7 @@ public class UnorderedParallelStopper extends StoppingMethod {
 				logLine("All finished " + benchmark.getId());
 				lastRanking = getRanking(benchmark);
 				rankingAfterBenchmark.put(benchmark, lastRanking);
-				List<Runner> shouldStop = new LinkedList<>(getStillInRace());
+				List<Runner> shouldStop = new LinkedList<Runner>(getStillInRace());
 				shouldStop.removeAll(lastRanking);
 
 				for (Runner toStop : shouldStop) {
@@ -122,11 +122,11 @@ public class UnorderedParallelStopper extends StoppingMethod {
 		Double sumRemainingWeights = 0d;
 
 		SortedSetMultimap<Double, InstanceType> resultForType;
-		List<Runner> ranking = new LinkedList<>(getStillInRace());
-		List<InstanceType> instanceTypes = new LinkedList<>();
-		List<IMetricsType> doneMetricsTypes = new LinkedList<>();
+		List<Runner> ranking = new LinkedList<Runner>(getStillInRace());
+		List<InstanceType> instanceTypes = new LinkedList<InstanceType>();
+		List<IMetricsType> doneMetricsTypes = new LinkedList<IMetricsType>();
 
-		List<Benchmark> benchmarks = new ArrayList<>(getOrderedBenchmarks());
+		List<Benchmark> benchmarks = new ArrayList<Benchmark>(getOrderedBenchmarks());
 		int indexLast = benchmarks.indexOf(lastBenchmark);
 
 		for (int i = 0; i <= indexLast; i++) {
@@ -141,7 +141,7 @@ public class UnorderedParallelStopper extends StoppingMethod {
 			sumRemainingWeights += getMetricsConfiguration().getWeight(remainingBenchmark);
 		}
 
-		Map<InstanceType, Multimap<IMetricsType, IMetricsResult>> resultsForDoneMetricsTypesForType = new HashMap<>();
+		Map<InstanceType, Multimap<IMetricsType, IMetricsResult>> resultsForDoneMetricsTypesForType = new HashMap<InstanceType, Multimap<IMetricsType, IMetricsResult>>();
 		Map<InstanceType, Multimap<IMetricsType, IMetricsResult>> resultsForAllMetricsTypesForType =
 		    getResultsForAllMetricsTypesForType();
 
@@ -181,7 +181,7 @@ public class UnorderedParallelStopper extends StoppingMethod {
 
 				getMetricsConfiguration().putRelativeResults(metricsType, resultForType);
 
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 

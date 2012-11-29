@@ -13,9 +13,9 @@ import edu.kit.aifb.libIntelliCloudBench.model.InstanceType;
 public class StoppingConfiguration implements Serializable {
 	private static final long serialVersionUID = -3361301504863667619L;
 
-	public static final List<Class<? extends StoppingMethod>> STOPPING_METHODS = new ArrayList<>();
-	private static final List<String> STOPPING_METHODS_NAME = new ArrayList<>();
-	private static final List<Integer> STOPPING_METHODS_PARAM = new ArrayList<>();
+	public static final List<Class<? extends StoppingMethod>> STOPPING_METHODS = new ArrayList<Class<? extends StoppingMethod>>();
+	private static final List<String> STOPPING_METHODS_NAME = new ArrayList<String>();
+	private static final List<Integer> STOPPING_METHODS_PARAM = new ArrayList<Integer>();
 
 	static {
 		STOPPING_METHODS.add(NonStopper.class);

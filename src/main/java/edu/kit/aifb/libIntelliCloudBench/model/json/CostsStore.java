@@ -36,6 +36,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.util.HashMap;
@@ -149,23 +150,8 @@ public class CostsStore implements IMetricsType, Serializable {
 		return costsStore;
 	}
 
-	public static void dumpCostsStore(CostsStore costsStore) {
-		Writer costsResourceWriter = null;
-		try {
-			costsResourceWriter = new FileWriter("/tmp" + costsFilename);
-			getGson().toJson(costsStore, costsResourceWriter);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (costsResourceWriter != null)
-				try {
-					costsResourceWriter.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
+	public static String dumpCostsStore(CostsStore costsStore) {
+			return getGson().toJson(costsStore);
 	}
 
 	private static Gson getGson() {

@@ -162,7 +162,7 @@ public class BenchmarkSelectionPanel extends Panel {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				if ((boolean) costsCheckbox.getValue()) {
+				if ((Boolean) costsCheckbox.getValue()) {
 					benchmarkSelectionModel.selectCosts((Double) costsWeightSlider.getValue());
 				} else {
 					benchmarkSelectionModel.unselectCosts();
@@ -175,7 +175,7 @@ public class BenchmarkSelectionPanel extends Panel {
 			private static final long serialVersionUID = -4202721080880004598L;
 
 			public void valueChange(ValueChangeEvent event) {
-				if ((boolean) costsCheckbox.getValue())
+				if ((Boolean) costsCheckbox.getValue())
 					benchmarkSelectionModel.selectCosts((Double) costsWeightSlider.getValue());
 			}
 		});
@@ -202,7 +202,7 @@ public class BenchmarkSelectionPanel extends Panel {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				if ((boolean) budgetCheckbox.getValue()) {
+				if ((Boolean) budgetCheckbox.getValue()) {
 					benchmarkSelectionModel.setCostsBudgetSelected(true);
 					benchmarkSelectionModel.setCostsBudget(budgetField.getDoubleValueDoNotThrow());
 				} else {
@@ -217,7 +217,7 @@ public class BenchmarkSelectionPanel extends Panel {
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				if ((boolean) budgetCheckbox.getValue())
+				if ((Boolean) budgetCheckbox.getValue())
 					benchmarkSelectionModel.setCostsBudget(budgetField.getDoubleValueDoNotThrow());
 			}
 
@@ -234,7 +234,7 @@ public class BenchmarkSelectionPanel extends Panel {
 		boolean requiresReference = false;
 		try {
 			requiresReference = instanceOrderer.getField("REQUIRES_REFERENCE").getBoolean(null);
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return requiresReference;

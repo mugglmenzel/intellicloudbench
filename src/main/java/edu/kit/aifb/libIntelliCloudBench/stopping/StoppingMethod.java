@@ -30,15 +30,15 @@ public abstract class StoppingMethod {
 	private MetricsConfiguration metricsConfiguration;
 	private Integer param = null;
 
-	private LinkedList<Runner> orderedRunners = new LinkedList<>();
-	private Map<InstanceType, Runner> instanceTypeToRunner = new HashMap<>();
-	private Map<InstanceType, Multimap<IMetricsType, IMetricsResult>> resultsForAllMetricsTypesForType = new HashMap<>();
+	private LinkedList<Runner> orderedRunners = new LinkedList<Runner>();
+	private Map<InstanceType, Runner> instanceTypeToRunner = new HashMap<InstanceType, Runner>();
+	private Map<InstanceType, Multimap<IMetricsType, IMetricsResult>> resultsForAllMetricsTypesForType = new HashMap<InstanceType, Multimap<IMetricsType, IMetricsResult>>();
 
-	private Collection<Runner> runnersDone = new HashSet<>();
-	private Collection<Runner> runnersAborted = new HashSet<>();
-	private Collection<Runner> runnersStopped = new HashSet<>();
+	private Collection<Runner> runnersDone = new HashSet<Runner>();
+	private Collection<Runner> runnersAborted = new HashSet<Runner>();
+	private Collection<Runner> runnersStopped = new HashSet<Runner>();
 
-	private Map<Runner, Boolean> scheduledToTerminate = new HashMap<>();
+	private Map<Runner, Boolean> scheduledToTerminate = new HashMap<Runner, Boolean>();
 
 	private Double budgetApproved = 0d;
 
@@ -91,8 +91,7 @@ public abstract class StoppingMethod {
 				runner =
 				    runnerType.getConstructor(IService.class, StoppingMethod.class, InstanceType.class, List.class)
 				        .newInstance(service, this, instanceType, this.orderedBenchmarks);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-			    | NoSuchMethodException | SecurityException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			this.scheduledToTerminate.put(runner, false);
@@ -163,7 +162,7 @@ public abstract class StoppingMethod {
 	}
 
 	public List<Runner> getStillRunning() {
-		List<Runner> stillRunning = new LinkedList<>(orderedRunners);
+		List<Runner> stillRunning = new LinkedList<Runner>(orderedRunners);
 		stillRunning.removeAll(runnersDone);
 		stillRunning.removeAll(runnersStopped);
 		stillRunning.removeAll(runnersAborted);
@@ -171,7 +170,7 @@ public abstract class StoppingMethod {
 	}
 
 	public List<Runner> getStillInRace() {
-		List<Runner> stillInRace = new LinkedList<>(orderedRunners);
+		List<Runner> stillInRace = new LinkedList<Runner>(orderedRunners);
 		stillInRace.removeAll(runnersStopped);
 		stillInRace.removeAll(runnersAborted);
 		return stillInRace;

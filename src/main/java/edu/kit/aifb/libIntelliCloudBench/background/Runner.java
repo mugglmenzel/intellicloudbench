@@ -145,7 +145,7 @@ public abstract class Runner implements Runnable {
 						resultsForBenchmark = upload(benchmark);
 						stopper.updateResults(this, resultsForBenchmark);
 						stopper.notifyBenchmarkDone(this, benchmark);
-					} catch (ParseXmlResultException | RunScriptOnMachineException e) {
+					} catch (Exception e) {
 						instanceState.setAborted(e);
 						stopper.setFailed(this);
 					}

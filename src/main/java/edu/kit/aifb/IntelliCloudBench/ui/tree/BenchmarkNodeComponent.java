@@ -58,8 +58,8 @@ import edu.kit.aifb.libIntelliCloudBench.model.NotReadyException;
 public class BenchmarkNodeComponent extends NodeComponent<Collection<Benchmark>> {
 	private static final long serialVersionUID = -7117550318213468517L;
 
-	private Collection<CheckBox> allLeafs = new HashSet<>();
-	private Map<CheckBox, IMetricsType> checkBoxForMetricsType = new HashMap<>();
+	private Collection<CheckBox> allLeafs = new HashSet<CheckBox>();
+	private Map<CheckBox, IMetricsType> checkBoxForMetricsType = new HashMap<CheckBox, IMetricsType>();
 
 	private Label textLabel;
 
@@ -168,7 +168,7 @@ public class BenchmarkNodeComponent extends NodeComponent<Collection<Benchmark>>
 				@Override
 				public void valueChange(ValueChangeEvent event) {
 					Benchmark benchmark = (Benchmark) checkBoxForMetricsType.get(checkBox);
-					if ((boolean) checkBox.getValue()) {
+					if ((Boolean) checkBox.getValue()) {
 						benchmarkSelectionModel.select(benchmark, (Double) weightSlider.getValue());
 					} else {
 						benchmarkSelectionModel.unselect(benchmark);
@@ -182,7 +182,7 @@ public class BenchmarkNodeComponent extends NodeComponent<Collection<Benchmark>>
 				
 				@Override
 				public void valueChange(ValueChangeEvent event) {
-					if ((boolean) checkBox.getValue()) {
+					if ((Boolean) checkBox.getValue()) {
 						Benchmark benchmark = (Benchmark) checkBoxForMetricsType.get(checkBox);
 						benchmarkSelectionModel.select(benchmark, (Double) weightSlider.getValue());
 					}

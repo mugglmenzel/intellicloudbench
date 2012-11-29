@@ -17,12 +17,12 @@ public class NonStopper extends StoppingMethod {
 
 	@Override
   public List<Benchmark> orderBenchmarks(List<Benchmark> benchmarks) {
-	  return new LinkedList<>(benchmarks);
+	  return new LinkedList<Benchmark>(benchmarks);
   }
 
 	@Override
   public List<InstanceType> orderInstanceTypes(List<InstanceType> instanceTypes) {
-		return new LinkedList<>(instanceTypes);
+		return new LinkedList<InstanceType>(instanceTypes);
   }
 
 	@Override

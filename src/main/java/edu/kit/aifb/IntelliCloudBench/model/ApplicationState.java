@@ -37,9 +37,9 @@ import edu.kit.aifb.libIntelliCloudBench.CloudBenchService;
 
 public class ApplicationState {
 	
-	private static Map<String, User> usersById = new HashMap<>();
-	private static Map<String, UIState> uiStateForUser = new HashMap<>();
-	private static Map<String, CloudBenchService> serviceForUser = new HashMap<>();
+	private static Map<String, User> usersById = new HashMap<String, User>();
+	private static Map<String, UIState> uiStateForUser = new HashMap<String, UIState>();
+	private static Map<String, CloudBenchService> serviceForUser = new HashMap<String, CloudBenchService>();
 	
 	public static UIState getUIStateForUser(User user) {
 		UIState state = uiStateForUser.get(user.getId());

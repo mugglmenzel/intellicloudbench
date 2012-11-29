@@ -30,12 +30,7 @@
 
 package edu.kit.aifb.IntelliCloudBench.util;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Map;
-import java.util.Properties;
 
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.GoogleApi20;
@@ -54,7 +49,7 @@ import edu.kit.aifb.IntelliCloudBench.model.User;
 
 @SuppressWarnings("serial")
 public class OAuthHandler implements ParameterHandler {
-	private static final String OAUTH_CONFIG_FILE = "/oauth.properties";
+
 	/* Infos for redirection to Google Login Page */
 	private static final Token EMPTY_TOKEN = null;
 	private static final String SCOPE = "https://www.googleapis.com/auth/userinfo.profile";
@@ -68,17 +63,10 @@ public class OAuthHandler implements ParameterHandler {
 	private IOAuthListener listener;
 
 	public OAuthHandler(IOAuthListener listener, String callbackUrl) {
-		Properties properties = new Properties();
-		URL oauthResourceUrl = OAuthHandler.class.getResource(OAUTH_CONFIG_FILE);
-		File oauthResourceFile = new File(oauthResourceUrl.getFile());
-		try {
-			properties.load(new FileReader(oauthResourceFile));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
 
-		String apiKey = properties.getProperty("googleapikey");
-		String apiSecret = properties.getProperty("googleapisecret");
+		String apiKey = "468842765661-6h31fuui4vgmvd170k6qgl6vc080qs6r.apps.googleusercontent.com";
+		String apiSecret = "5sS6JWoF1plpGVAIvXc44xcK";
 
 		this.listener = listener;
 		this.service =
