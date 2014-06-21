@@ -28,9 +28,9 @@ public class RepetitionsExperiment {
         System.out.println("Selecting Compute Services...");
         List<InstanceType> computeServices = new ArrayList<InstanceType>();
 
-        Provider provider = new Provider(ContextBuilder.newBuilder("aws-ec2").credentials("AKIAI4NTE5JUVUND43MQ", "12krm1o87Th91HpgrVd5QrslEtpWSe6S8GAvH4yS").build().getProviderMetadata());
-        provider.getCredentials().setKey("AKIAI4NTE5JUVUND43MQ");
-        provider.getCredentials().setSecret("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");
+        Provider provider = new Provider(ContextBuilder.newBuilder("aws-ec2").credentials(AWSCredentials.ACCESS_KEY, AWSCredentials.SECRET_KEY).build().getProviderMetadata());
+        provider.getCredentials().setKey(AWSCredentials.ACCESS_KEY);
+        provider.getCredentials().setSecret(AWSCredentials.SECRET_KEY);
 
         Template tmpl = benchService.getContext(provider).getComputeService().templateBuilder().hardwareId(org.jclouds.ec2.domain.InstanceType.T1_MICRO).locationId(org.jclouds.aws.domain.Region.US_EAST_1).build();
 

@@ -6,3 +6,4 @@ src/main/resources/oauth.properties
 target/*
 *~
 /target
+src/**/AWSCredentials.java
