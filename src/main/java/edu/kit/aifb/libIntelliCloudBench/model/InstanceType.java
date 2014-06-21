@@ -97,4 +97,13 @@ public class InstanceType implements Serializable {
 	public String asString(String delimiter) {
 		return getProvider().getId() + delimiter + getRegion().getId() + delimiter + getHardwareType().getId();
 	}
+
+    @Override
+    public String toString() {
+        return "InstanceType{" +
+                "provider=" + provider +
+                ", region=" + region +
+                ", hardwareType=" + hardwareType +
+                '}';
+    }
 }

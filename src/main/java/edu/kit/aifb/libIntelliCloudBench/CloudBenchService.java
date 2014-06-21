@@ -226,6 +226,10 @@ public class CloudBenchService extends Observable implements Serializable, ICred
 		this.benchmarks = new LinkedList<Benchmark>(resultsForAllBenchmarksForType.get(instanceType).keySet());
 	}
 
+    public StoppingMethod getStopper() {
+        return stopper;
+    }
+
 	public String getStopperLog() {
 		if (stopper == null)
 			return "";

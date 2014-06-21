@@ -88,7 +88,6 @@ public class Benchmark implements IMetricsType, Serializable {
 	    "bork-1.0.0",
 	    "bullet-1.1.0",
 	    "compilebench-1.0.0",
-	    "crafty-1.3.0",
 	    "encode-ogg-1.4.0",
 	    "encode-wavpack-1.2.0",
 	    "espeak-1.3.0",
@@ -130,6 +129,7 @@ public class Benchmark implements IMetricsType, Serializable {
 	List<String> options;
 	LinkedListMultimap<String, String> valuesByOption;
 	Map<String, Integer> selectedValueForOption = new HashMap<String, Integer>();
+    private int repetitions = 3;
 
 	public Benchmark(String id, String name, String description, String type, Integer avgRunTime, List<String> options,
 	    LinkedListMultimap<String, String> valuesByOption) {
@@ -361,7 +361,16 @@ public class Benchmark implements IMetricsType, Serializable {
 		return avgRuntimeForBenchmark;
 	}
 
-	@Override
+
+    public int getRepetitions() {
+        return repetitions;
+    }
+
+    public void setRepetitions(int repetitions) {
+        this.repetitions = repetitions;
+    }
+
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -385,4 +394,15 @@ public class Benchmark implements IMetricsType, Serializable {
 			return false;
 		return true;
 	}
+
+    @Override
+    public String toString() {
+        return "Benchmark{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", avgRunTime=" + avgRunTime +
+                '}';
+    }
 }

@@ -30,156 +30,155 @@
 
 package edu.kit.aifb.libIntelliCloudBench.model;
 
-import java.io.Serializable;
-
-import org.joda.time.Duration;
-
 import edu.kit.aifb.libIntelliCloudBench.logging.Logger;
 import edu.kit.aifb.libIntelliCloudBench.model.json.CostsStore;
 import edu.kit.aifb.libIntelliCloudBench.model.json.CostsStore.Costs;
+import org.joda.time.Duration;
+
+import java.io.Serializable;
 
 public class InstanceState extends Logger implements Serializable {
-	private static final long serialVersionUID = 2512010109245300904L;
+    private static final long serialVersionUID = 2512010109245300904L;
 
-	public enum State {
-		PREPARE, INIT, DEPLOY, DOWNLOAD, RUN, UPLOAD, DONE, ABORTED, WAIT, STOPPED
-	}
+    public enum State {
+        PREPARE, INIT, DEPLOY, DOWNLOAD, RUN, UPLOAD, DONE, ABORTED, WAIT, STOPPED
+    }
 
-	private State state = State.WAIT;
-	private InstanceType instanceType;
-	private int numberOfBenchmarks;
+    private State state = State.WAIT;
+    private InstanceType instanceType;
+    private int numberOfBenchmarks;
 
-	private Float percentage = 0f;
-	private String status = "Waiting...";
-	private Float period;
+    private Float percentage = 0f;
+    private String status = "Waiting...";
+    private Float period;
 
-	private Long startTime = null;
-	private Duration durationAfterFinish = null;
+    private Long startTime = null;
+    private Duration durationAfterFinish = null;
 
-	public InstanceState(InstanceType instanceType, int numberOfBenchmarks) {
-		this.instanceType = instanceType;
-		this.numberOfBenchmarks = numberOfBenchmarks;
-		this.period = 1f / new Float(numberOfBenchmarks + State.values().length - 6);
-	}
+    public InstanceState(InstanceType instanceType, int numberOfBenchmarks) {
+        this.instanceType = instanceType;
+        this.numberOfBenchmarks = numberOfBenchmarks;
+        this.period = 1f / new Float(numberOfBenchmarks + State.values().length - 6);
+    }
 
-	public InstanceType getInstanceType() {
-		return instanceType;
-	}
+    public InstanceType getInstanceType() {
+        return instanceType;
+    }
 
-	public void setPrepare() {
-		String message = "Preparing to initialize machine...";
-		set(State.PREPARE, 0f, message);
-	}
+    public void setPrepare() {
+        String message = "Preparing to initialize machine...";
+        set(State.PREPARE, 0f, message);
+    }
 
-	public void setStopped() {
-		if (startTime != null)
-			durationAfterFinish = new Duration(startTime, System.currentTimeMillis());
-		String message = "Stopped.";
-		set(State.STOPPED, 1f, message);
-	}
+    public void setStopped() {
+        if (startTime != null)
+            durationAfterFinish = new Duration(startTime, System.currentTimeMillis());
+        String message = "Stopped.";
+        set(State.STOPPED, 1f, message);
+    }
 
-	public void setDone() {
-		durationAfterFinish = new Duration(startTime, System.currentTimeMillis());
-		String message = "Done.";
-		set(State.DONE, 1f, message);
-	}
+    public void setDone() {
+        durationAfterFinish = new Duration(startTime, System.currentTimeMillis());
+        String message = "Done.";
+        set(State.DONE, 1f, message);
+    }
 
-	public void setUpload(int step, String name) {
-		String message = "(" + step + "/" + numberOfBenchmarks + ") Uploading benchmark results for \"" + name + "\"";
-		set(State.UPLOAD, (period * 2.8f) + new Float(step) * period, message);
-	}
+    public void setUpload(int step, String name) {
+        String message = "(" + step + "/" + numberOfBenchmarks + ") Uploading benchmark results for \"" + name + "\"";
+        set(State.UPLOAD, (period * 2.8f) + new Float(step) * period, message);
+    }
 
-	public void setRun(int step, String name) {
-		String message =
-		    "(" + step + "/" + numberOfBenchmarks + ") Running bechmark \"" + name + "\". This could take a while...";
-		set(State.RUN, (period * 2f) + new Float(step) * period, message);
-	}
+    public void setRun(int step, String name) {
+        String message =
+                "(" + step + "/" + numberOfBenchmarks + ") Running bechmark \"" + name + "\". This could take a while...";
+        set(State.RUN, (period * 2f) + new Float(step) * period, message);
+    }
 
-	public void setDownload(int step, String name) {
-		String message = "(" + step + "/" + numberOfBenchmarks + ") Downloading bechmark \"" + name + "\"...";
-		set(State.DOWNLOAD, period + (new Float(step) / new Float(numberOfBenchmarks)) * period, message);
-	}
+    public void setDownload(int step, String name) {
+        String message = "(" + step + "/" + numberOfBenchmarks + ") Downloading bechmark \"" + name + "\"...";
+        set(State.DOWNLOAD, period + (new Float(step) / new Float(numberOfBenchmarks)) * period, message);
+    }
 
-	public void setDeploy() {
-		String message = "Deploying benchmark suite...";
-		set(State.DEPLOY, period, message);
-	}
+    public void setDeploy() {
+        String message = "Deploying benchmark suite...";
+        set(State.DEPLOY, period, message);
+    }
 
-	public void setInit() {
-		String message = "Initializing machine...";
-		startTime = System.currentTimeMillis();
-		set(State.INIT, period / 2f, message);
-	}
+    public void setInit() {
+        String message = "Initializing machine...";
+        startTime = System.currentTimeMillis();
+        set(State.INIT, period / 2f, message);
+    }
 
-	public void setAborted() {
-		durationAfterFinish = new Duration(startTime, System.currentTimeMillis());
-		String message = "Aborted by user.";
-		set(State.ABORTED, 1f, message);
-	}
+    public void setAborted() {
+        durationAfterFinish = new Duration(startTime, System.currentTimeMillis());
+        String message = "Aborted by user.";
+        set(State.ABORTED, 1f, message);
+    }
 
-	public void setAborted(Exception e) {
-		durationAfterFinish = new Duration(startTime, System.currentTimeMillis());
-		StringBuilder sb = new StringBuilder();
-		sb.append("Aborted by ");
-		sb.append(e.getClass().getSimpleName());
-		sb.append(": ");
-		sb.append(e.getMessage());
-		sb.append("\n");
-		for (StackTraceElement element : e.getStackTrace()) {
-			sb.append(element.toString());
-			sb.append("\n");
-		}
-		set(State.ABORTED, 1f, sb.toString());
-	}
+    public void setAborted(Exception e) {
+        durationAfterFinish = new Duration(startTime, System.currentTimeMillis());
+        StringBuilder sb = new StringBuilder();
+        sb.append("Aborted by ");
+        sb.append(e.getClass().getSimpleName());
+        sb.append(": ");
+        sb.append(e.getMessage());
+        sb.append("\n");
+        for (StackTraceElement element : e.getStackTrace()) {
+            sb.append(element.toString());
+            sb.append("\n");
+        }
+        set(State.ABORTED, 1f, sb.toString());
+    }
 
-	public void set(State state, Float percentage, String status) {
-		log(status);
+    public void set(State state, Float percentage, String status) {
+        log(status + " (Duration: " + (System.currentTimeMillis() - (startTime != null ? startTime : System.currentTimeMillis())) + ")");
 
-		this.state = state;
-		this.percentage = percentage;
-		this.status = status;
+        this.state = state;
+        this.percentage = percentage;
+        this.status = status;
 
-		forceUpdate();
-	}
+        forceUpdate();
+    }
 
-	public void forceUpdate() {
-		this.setChanged();
-		this.notifyObservers();
-	}
+    public void forceUpdate() {
+        this.setChanged();
+        this.notifyObservers();
+    }
 
-	public State getState() {
-		return state;
-	}
+    public State getState() {
+        return state;
+    }
 
-	public Float getPercentage() {
-		return percentage;
-	}
+    public Float getPercentage() {
+        return percentage;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public Duration getRunningDuration() {
-		if (startTime == null)
-			return new Duration(0);
-		if (durationAfterFinish != null)
-			return durationAfterFinish;
-		return new Duration(startTime, System.currentTimeMillis() + 1);
-	}
+    public Duration getRunningDuration() {
+        if (startTime == null)
+            return new Duration(0);
+        if (durationAfterFinish != null)
+            return durationAfterFinish;
+        return new Duration(startTime, System.currentTimeMillis() + 1);
+    }
 
-	public double getEstimatedCosts() {
-		Costs costs =
-		    CostsStore.getInstance().getCosts(
-		        getInstanceType().getProvider().getId(),
-		        getInstanceType().getRegion().getId(),
-		        getInstanceType().getHardwareType().getId());
-		Duration duration = getRunningDuration();
+    public double getEstimatedCosts() {
+        Costs costs =
+                CostsStore.getInstance().getCosts(
+                        getInstanceType().getProvider().getId(),
+                        getInstanceType().getRegion().getId(),
+                        getInstanceType().getHardwareType().getId());
+        Duration duration = getRunningDuration();
 
-		long paidHours = 0;
-		if (duration.getMillis() > 0)
-			paidHours = getRunningDuration().getStandardHours() + 1;
+        long paidHours = 0;
+        if (duration.getMillis() > 0)
+            paidHours = getRunningDuration().getStandardHours() + 1;
 
-		return costs.getFixedCosts() + paidHours * costs.getVariableCosts();
-	}
+        return costs.getFixedCosts() + paidHours * costs.getVariableCosts();
+    }
 
 }

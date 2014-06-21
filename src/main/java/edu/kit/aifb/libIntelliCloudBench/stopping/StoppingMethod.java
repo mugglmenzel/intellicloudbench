@@ -13,6 +13,7 @@ import com.google.common.collect.Multimap;
 
 import edu.kit.aifb.libIntelliCloudBench.IService;
 import edu.kit.aifb.libIntelliCloudBench.background.Runner;
+import edu.kit.aifb.libIntelliCloudBench.logging.ILogListener;
 import edu.kit.aifb.libIntelliCloudBench.metrics.CostsResult;
 import edu.kit.aifb.libIntelliCloudBench.metrics.IMetricsResult;
 import edu.kit.aifb.libIntelliCloudBench.metrics.IMetricsType;
@@ -86,11 +87,17 @@ public abstract class StoppingMethod {
 		}
 
 		Runner runner = null;
-		for (InstanceType instanceType : orderedInstanceTypes) {
+		for (final InstanceType instanceType : orderedInstanceTypes) {
 			try {
 				runner =
 				    runnerType.getConstructor(IService.class, StoppingMethod.class, InstanceType.class, List.class)
 				        .newInstance(service, this, instanceType, this.orderedBenchmarks);
+                runner.getInstanceState().registerListener(new ILogListener() {
+                    @Override
+                    public void updateLog(String log) {
+                        System.out.println(instanceType.asString(",") + " - " + log);
+                    }
+                });
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -250,7 +257,10 @@ public abstract class StoppingMethod {
 	}
 
 	public String getLog() {
-		return logBuilder.toString();
+        String runnerLogs = "";
+        for(Runner r : getRunners())
+            runnerLogs += r.getInstanceState().getLog() + "\n";
+		return logBuilder.toString() + "\n" + runnerLogs;
 	}
 
 	protected void logLine(String logLine) {

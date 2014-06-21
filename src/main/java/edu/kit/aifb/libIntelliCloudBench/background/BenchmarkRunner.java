@@ -90,7 +90,8 @@ public class BenchmarkRunner extends Runner {
 	/* Enable all repositories */
 	"sudo sed -i -e \"s/# deb/deb/g\" /etc/apt/sources.list",
 	/* Update the apt sources as the image couldn't be up-to-date */
-	"sudo apt-get -q -y update" };
+	"sudo apt-get -q -y update",
+    "sudo apt-get -q -y install unzip" };
 
 	private static final String[] SETUP_PHP_COMMANDS = {
 	/* Install PHP, as it is required for Phoronix Test Suite */
@@ -101,7 +102,7 @@ public class BenchmarkRunner extends Runner {
 	    "sudo mkdir " + PTS_CONFIG_DEPLOYMENT_PATH,
 	    "sudo tar xvfz /tmp/" + PTS_DIR_NAME + ".tar.gz -C " + PTS_DEPLOYMENT_PATH,
 	    "sudo tar xvfz /tmp/" + PTS_CONFIG_DIR_NAME + ".tar.gz -C " + PTS_CONFIG_DEPLOYMENT_PATH,
-	    "sudo chown -R root:root " + PTS_CONFIG_DEPLOYMENT_PATH + "/" };
+	    "sudo chown -R root:root " + PTS_CONFIG_DEPLOYMENT_PATH + "/"};
 
 	private static final String[] UPLOAD_COMMANDS = {
 	    "sudo chmod 755 " + PTS_CONFIG_DEPLOYMENT_PATH,
@@ -249,12 +250,16 @@ public class BenchmarkRunner extends Runner {
 
 		/* Upload PTS */
 		URL resource = this.getClass().getResource(File.separator + PTS_DIR_NAME + ".tar.gz");
+        log("PTS package URL: " + resource.toString());
 		File ptsPackage = new File(resource.getFile());
+        log("PTS package size: " + ptsPackage.length());
 		ssh.put("/tmp/" + ptsPackage.getName(), new FilePayload(ptsPackage));
 
 		/* Upload pre-defined config */
 		resource = this.getClass().getResource(File.separator + PTS_CONFIG_DIR_NAME + ".tar.gz");
+        log("PTS config URL: " + resource.toString());
 		File ptsConfig = new File(resource.getFile());
+        log("PTS config size: " + ptsConfig.length());
 		ssh.put("/tmp/" + ptsConfig.getName(), new FilePayload(ptsConfig));
 
 		/* Just to make sure the destination directories are there */
@@ -276,6 +281,7 @@ public class BenchmarkRunner extends Runner {
 		/* Install the benchmark using PTS */
 		NodeHelper.runScript(this, ssh, channel, "cd " + PTS_DEPLOYMENT_PATH + "/" + PTS_DIR_NAME + " && sudo ./"
 		    + PTS_EXECUTABLE + " batch-install " + benchmark.getId());
+        NodeHelper.runScript(this, ssh, channel, "sudo cat " + PTS_CONFIG_DEPLOYMENT_PATH + "/" + PTS_CONFIG_DIR_NAME + "/installed-tests/pts/" + benchmark.getId() + "/install-failed.log ");
 	}
 
 	private void runBenchmark(SshClient ssh, Benchmark benchmark) throws RunScriptOnMachineException {
@@ -291,8 +297,8 @@ public class BenchmarkRunner extends Runner {
 			sb.append("\n");
 		}
 
-		/* Install the benchmark using PTS */
-		NodeHelper.runScript(this, ssh, channel, "cd " + PTS_DEPLOYMENT_PATH + "/" + PTS_DIR_NAME + " && sudo ./"
+		/* Run the benchmark using PTS */
+		NodeHelper.runScript(this, ssh, channel, "export TOTAL_LOOP_COUNT=" + benchmark.getRepetitions() + " && cd " + PTS_DEPLOYMENT_PATH + "/" + PTS_DIR_NAME + " && sudo ./"
 		    + PTS_EXECUTABLE + " batch-run " + benchmark.getId(), sb.toString());
 	}
 
