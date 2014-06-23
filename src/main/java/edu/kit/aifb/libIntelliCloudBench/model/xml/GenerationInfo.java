@@ -34,31 +34,38 @@ import org.simpleframework.xml.Element;
 
 public class GenerationInfo {
 
-	@Element(name="Title", required=false)
-	private String title;
-	
-	@Element(name="LastModified", required=false)
-	private String lastModified;
-	
-	@Element(name="TestClient", required=false)
-	private String testClient;
-	
-	@Element(name="Description", required=false)
-	private String description;
+    @Element(name = "Title", required = false)
+    private String title;
 
-	public String getTitle() {
-  	return title;
-  }
+    @Element(name = "LastModified", required = false)
+    private String lastModified;
 
-	public String getLastModified() {
-  	return lastModified;
-  }
+    @Element(name = "TestClient", required = false)
+    private String testClient;
 
-	public String getTestClient() {
-  	return testClient;
-  }
+    @Element(name = "Description", required = false)
+    private String description;
 
-	public String getDescription() {
-  	return description;
-  }
+    @Element(name = "PreSetEnvironmentVariables", required = false)
+    private String env;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getLastModified() {
+        return lastModified;
+    }
+
+    public String getTestClient() {
+        return testClient;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getEnv() {
+        return env;
+    }
 }

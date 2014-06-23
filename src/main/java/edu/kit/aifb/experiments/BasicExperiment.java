@@ -43,9 +43,7 @@ public class BasicExperiment {
 
         //Select Benchmarks
         Set<String> benchIds = new HashSet<String>();
-        //benchIds.add("c-ray-1.1.0");
-        benchIds.add("dcraw-1.1.0");
-        //benchIds.add("compilebench-1.0.0");
+        benchIds.add("sudokut-1.0.0");
 
         System.out.println("Selecting Benchmarks...");
         MetricsConfiguration metricConfig = new MetricsConfiguration(computeServices);
@@ -89,9 +87,9 @@ public class BasicExperiment {
         long endTime = new Date().getTime();
         benchService.terminateAllImmediately();
         System.out.println("Took " + (endTime - startTime) + " ms.");
-        System.out.println("Log:\n" + benchService.getStopperLog());
-        System.out.println("Results Stopper:\n" + benchService.getStopper().getResultsForAllMetricsTypesForType());
-        System.out.println("Results Service:\n" + benchService.getResultsForAllBenchmarksForType());
+        //System.out.println("Log:\n" + benchService.getStopperLog());
+        //System.out.println("Results Stopper:\n" + benchService.getStopper().getResultsForAllMetricsTypesForType());
+        //System.out.println("Results Service:\n" + benchService.getResultsForAllBenchmarksForType());
 
         System.gc();
     }

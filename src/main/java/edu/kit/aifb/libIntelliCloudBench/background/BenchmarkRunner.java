@@ -275,6 +275,9 @@ public class BenchmarkRunner extends Runner {
 		for (int i = 2; i < DEPLOY_PTS_COMMANDS.length; i++) {
 			NodeHelper.runScript(this, ssh, channel, DEPLOY_PTS_COMMANDS[i]);
 		}
+
+        NodeHelper.runScript(this, ssh, channel, "cd " + PTS_DEPLOYMENT_PATH + "/" + PTS_DIR_NAME + " && sudo ./"
+                + PTS_EXECUTABLE + " version", "Y");
 	}
 
 	private void installBenchmark(SshClient ssh, Benchmark benchmark) throws RunScriptOnMachineException {
@@ -298,7 +301,8 @@ public class BenchmarkRunner extends Runner {
 		}
 
 		/* Run the benchmark using PTS */
-		NodeHelper.runScript(this, ssh, channel, "export TOTAL_LOOP_COUNT=" + benchmark.getRepetitions() + " && cd " + PTS_DEPLOYMENT_PATH + "/" + PTS_DIR_NAME + " && sudo ./"
+        NodeHelper.runScript(this, ssh, channel, "sudo export TOTAL_LOOP_COUNT=" + benchmark.getRepetitions() + " && env");
+		NodeHelper.runScript(this, ssh, channel, "cd " + PTS_DEPLOYMENT_PATH + "/" + PTS_DIR_NAME + " && sudo ./"
 		    + PTS_EXECUTABLE + " batch-run " + benchmark.getId(), sb.toString());
 	}
 

@@ -91,9 +91,9 @@ public class MultiBenchExperiment {
         long endTime = new Date().getTime();
         benchService.terminateAllImmediately();
         System.out.println("Took " + (endTime - startTime) + " ms.");
-        System.out.println("Log:\n" + benchService.getStopperLog());
-        System.out.println("Results Stopper:\n" + benchService.getStopper().getResultsForAllMetricsTypesForType());
-        System.out.println("Results Service:\n" + benchService.getResultsForAllBenchmarksForType());
+        //System.out.println("Log:\n" + benchService.getStopperLog());
+        //System.out.println("Results Stopper:\n" + benchService.getStopper().getResultsForAllMetricsTypesForType());
+        //System.out.println("Results Service:\n" + benchService.getResultsForAllBenchmarksForType());
 
         System.gc();
     }
