@@ -130,7 +130,7 @@ public class BenchmarkRunner extends Runner {
 		super(service, stopper, instanceType, benchmarks);
 
 		group =
-		    (getInstanceType().getRegion().getId() + "-" + getInstanceType().getHardwareType().getId()).replaceAll(
+		    (getInstanceType().getRegion().getId().toLowerCase() + "-" + getInstanceType().getHardwareType().getId().toLowerCase()).replaceAll(
 		        "[^a-zA-Z0-9-]",
 		        "");
 	}
@@ -301,7 +301,7 @@ public class BenchmarkRunner extends Runner {
 		}
 
 		/* Run the benchmark using PTS */
-        NodeHelper.runScript(this, ssh, channel, "sudo export TOTAL_LOOP_COUNT=" + benchmark.getRepetitions() + " && env");
+        NodeHelper.runScript(this, ssh, channel, "sudo export TOTAL_LOOP_COUNT=" + benchmark.getRepetitions());
 		NodeHelper.runScript(this, ssh, channel, "cd " + PTS_DEPLOYMENT_PATH + "/" + PTS_DIR_NAME + " && sudo ./"
 		    + PTS_EXECUTABLE + " batch-run " + benchmark.getId(), sb.toString());
 	}

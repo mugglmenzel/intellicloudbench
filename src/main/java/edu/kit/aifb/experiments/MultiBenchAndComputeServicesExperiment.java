@@ -11,6 +11,8 @@ import org.jclouds.ContextBuilder;
 import org.jclouds.aws.domain.*;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.ec2.domain.*;
+import org.jclouds.openstack.nova.v2_0.domain.zonescoped.ZoneAndId;
+import org.jclouds.rackspace.cloudservers.CloudServersUKProviderMetadata;
 
 import java.util.*;
 
@@ -31,24 +33,52 @@ public class MultiBenchAndComputeServicesExperiment {
         System.out.println("Selecting Compute Services...");
         List<InstanceType> computeServices = new ArrayList<InstanceType>();
 
-        Provider provider = new Provider(ContextBuilder.newBuilder("aws-ec2").credentials(AWSCredentials.ACCESS_KEY, AWSCredentials.SECRET_KEY).build().getProviderMetadata());
-        provider.getCredentials().setKey(AWSCredentials.ACCESS_KEY);
-        provider.getCredentials().setSecret(AWSCredentials.SECRET_KEY);
+        //AWS
+        Provider providerAWS = new Provider(ContextBuilder.newBuilder("aws-ec2").credentials(AWSCredentials.ACCESS_KEY, AWSCredentials.SECRET_KEY).build().getProviderMetadata());
+        providerAWS.getCredentials().setKey(AWSCredentials.ACCESS_KEY);
+        providerAWS.getCredentials().setSecret(AWSCredentials.SECRET_KEY);
 
-        Template tmpl = benchService.getContext(provider).getComputeService().templateBuilder().hardwareId(org.jclouds.ec2.domain.InstanceType.T1_MICRO).locationId(org.jclouds.aws.domain.Region.US_EAST_1).build();
+        Template tmpl = benchService.getContext(providerAWS).getComputeService().templateBuilder().hardwareId(org.jclouds.ec2.domain.InstanceType.T1_MICRO).locationId(org.jclouds.aws.domain.Region.US_EAST_1).build();
         Region region = new Region(tmpl.getLocation());
         HardwareType hardware = new HardwareType(tmpl.getHardware());
-        computeServices.add(new InstanceType(provider, region, hardware));
+        computeServices.add(new InstanceType(providerAWS, region, hardware));
 
-        tmpl = benchService.getContext(provider).getComputeService().templateBuilder().hardwareId(org.jclouds.ec2.domain.InstanceType.M1_SMALL).locationId(org.jclouds.aws.domain.Region.US_WEST_1).build();
+
+
+        //Rackspace
+        Provider providerRack = new Provider(ContextBuilder.newBuilder("rackspace-cloudservers-uk").credentials(RackspaceCredentials.USER, RackspaceCredentials.API_KEY).build().getProviderMetadata());
+        providerRack.getCredentials().setKey(RackspaceCredentials.USER);
+        providerRack.getCredentials().setSecret(RackspaceCredentials.API_KEY);
+
+
+
+        ZoneAndId zoneAndId = ZoneAndId.fromZoneAndId("LON", "standard1");
+        tmpl = benchService.getContext(providerRack).getComputeService().templateBuilder()
+                .hardwareId("LON/2")
+                .build();
         region = new Region(tmpl.getLocation());
         hardware = new HardwareType(tmpl.getHardware());
-        computeServices.add(new InstanceType(provider, region, hardware));
+        computeServices.add(new InstanceType(providerRack, region, hardware));
+
+
+        //GoGrid
+        /*
+        Provider providerGoGrid = new Provider(ContextBuilder.newBuilder("gogrid").credentials(GoGridCredentials.API_KEY, GoGridCredentials.SHARED_SECRET).build().getProviderMetadata());
+        providerGoGrid.getCredentials().setKey(GoGridCredentials.API_KEY);
+        providerGoGrid.getCredentials().setSecret(GoGridCredentials.SHARED_SECRET);
+
+        tmpl = benchService.getContext(providerGoGrid).getComputeService().templateBuilder()
+                .hardwareId("1")
+                .build();
+        region = new Region(tmpl.getLocation());
+        hardware = new HardwareType(tmpl.getHardware());
+        computeServices.add(new InstanceType(providerGoGrid, region, hardware));
+        */
 
         //Select Benchmarks
         Set<String> benchIds = new HashSet<String>();
         //benchIds.add("c-ray-1.1.0");
-        benchIds.add("dcraw-1.1.0");
+        //benchIds.add("dcraw-1.1.0");
         benchIds.add("sudokut-1.0.0");
         benchIds.add("crafty-1.3.0");
 

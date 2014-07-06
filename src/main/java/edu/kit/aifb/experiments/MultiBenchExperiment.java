@@ -44,7 +44,7 @@ public class MultiBenchExperiment {
 
         //Select Benchmarks
         Set<String> benchIds = new HashSet<String>();
-        benchIds.add("dcraw-1.1.0");
+//        benchIds.add("dcraw-1.1.0");
         benchIds.add("sudokut-1.0.0");
         benchIds.add("crafty-1.3.0");
 
